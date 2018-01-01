@@ -27,8 +27,7 @@ program dran
 
 
 allocate phi(n,2)
-
-
+allocate qphi(n,2)
 
 
 
