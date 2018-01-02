@@ -3,6 +3,8 @@
 !! also see about impliementation against qnot gates
 !! check starting with thermal distrubution for qbits.
 
+
+! swap operator for a line quantum walker
 subroutine swap(phi)
  complex,dimention(:,:),intent(inout)::phi
  int:: i,n
@@ -19,13 +21,13 @@ subroutine swap(phi)
 
 end subroutine
 
+
+! coin operator for line quantum walker
 subroutine mix(phi)
  complex,dimention(:,:),intent(inout)::phi
- complex,dimention(2,2)::Coin
  complex::hold
  int:: i,n
  n=size(phi,1)
- Coin(1,1)=1/sqrt(2);Coin(1,2)=1/sqrt(2);Coin(2,1)=1/sqrt(2);Coin(2,2)=-1/sqrt(2)
  do i=2,n-1
    hold=phi(i,1)
    phi(i,1)=1/sqrt(2)*hold+1/sqrt(2)*phi(i,2)
@@ -48,11 +50,19 @@ subroutine qjump(qphi)
 end subroutine
 
 program dran
+complex, dimension(:,:), allocatable:: phi,qphi
+integer::n
 
-
+n=10
 allocate phi(n,2)
 allocate qphi(n,2)
 
+phi(:,:)=cmplx(0.0,0.0)
+qphi(:,:)=cmplx(0.0,0.0)
+phi(n/2,1)=0.5/sqrt(2);phi(n/2,2)=0.5/sqrt(2)
+
+call mix(phi)
+call swap(phi)
 
 
 end program
