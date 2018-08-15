@@ -24,7 +24,7 @@ subroutine LWswap(phi)
    phi(i-1,2)=hold
  enddo
 
-end subroutine
+end subroutine LWswap
 
 
 ! coin operator for line quantum walker
@@ -40,28 +40,30 @@ subroutine LWmix(phi)
  enddo
  
 
-end subroutine
+end subroutine LWmix
 
 subroutine qinter(phi,qphi)
 complex,dimension(:,:),intent(inout)::phi
 complex,dimension(:,:),intent(inout)::qphi
 
-end subroutine
+end subroutine qinter
 
 subroutine qsole(qphi)
 complex,dimension(:,:),intent(inout)::qphi
 
-end subroutine
+end subroutine qsole
 
 subroutine qjump(qphi)
 complex,dimension(:,:),intent(inout)::qphi
 
-end subroutine
+end subroutine qjump
 
 end module
 
 program dran
+use LineTest
 implicit none
+
 complex, dimension(:,:), allocatable:: phi,qphi
 integer::n
 
