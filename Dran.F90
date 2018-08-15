@@ -4,65 +4,77 @@
 !! check starting with thermal distrubution for qbits.
 
 
+module LineTest
+  implicit none
+
+contains
+
 ! swap operator for a line quantum walker
-subroutine swap(phi)
- complex,dimention(:,:),intent(inout)::phi
- int:: i,n
- complex:: swap
+subroutine LWswap(phi)
+ complex,dimension(:,:),intent(inout)::phi
+ integer:: i,n
+ complex:: hold
  n=size(phi,1)
  do i=2,n-1
-   swap = phi(i,2)
+   hold = phi(i,2)
    phi(i,2)=phi(i+1,1)
-   phi(i+1,1)=swap
-   swap=phi(i,1)
+   phi(i+1,1)=hold
+   hold=phi(i,1)
    phi(i,1)=phi(i-1,2)
-   phi(i-1,2)=swap
+   phi(i-1,2)=hold
  enddo
 
 end subroutine
 
 
 ! coin operator for line quantum walker
-subroutine mix(phi)
- complex,dimention(:,:),intent(inout)::phi
+subroutine LWmix(phi)
+ complex,dimension(:,:),intent(inout)::phi
  complex::hold
- int:: i,n
+ integer:: i,n
  n=size(phi,1)
  do i=2,n-1
    hold=phi(i,1)
-   phi(i,1)=1/sqrt(2)*hold+1/sqrt(2)*phi(i,2)
-   phi(i,2)=1/sqrt(2)*hold-1/sqrt(2)*phi(i,2)
+   phi(i,1)=1/sqrt(2.0)*hold+1/sqrt(2.0)*phi(i,2)
+   phi(i,2)=1/sqrt(2.0)*hold-1/sqrt(2.0)*phi(i,2)
  enddo
  
 
 end subroutine
 
 subroutine qinter(phi,qphi)
+complex,dimension(:,:),intent(inout)::phi
+complex,dimension(:,:),intent(inout)::qphi
 
 end subroutine
 
 subroutine qsole(qphi)
+complex,dimension(:,:),intent(inout)::qphi
 
 end subroutine
 
 subroutine qjump(qphi)
+complex,dimension(:,:),intent(inout)::qphi
 
 end subroutine
 
+end module
+
 program dran
+implicit none
 complex, dimension(:,:), allocatable:: phi,qphi
 integer::n
 
 n=10
-allocate phi(n,2)
-allocate qphi(n,2)
+allocate(phi(n,2))
+allocate(qphi(n,2))
 
 phi(:,:)=cmplx(0.0,0.0)
 qphi(:,:)=cmplx(0.0,0.0)
-phi(n/2,1)=0.5/sqrt(2);phi(n/2,2)=0.5/sqrt(2)
+phi(n/2,1)=0.5/sqrt(2.0);phi(n/2,2)=0.5/sqrt(2.0)
 
-call mix(phi)
-call swap(phi)
+call LWmix(phi)
+call LWswap(phi)
 
 
 end program
