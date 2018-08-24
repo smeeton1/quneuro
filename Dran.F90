@@ -15,13 +15,13 @@ subroutine LWswap(phi)
  integer:: i,n
  complex:: hold
  n=size(phi,1)
- do i=2,n-1
+ do i=1,n-1
    hold = phi(i,2)
    phi(i,2)=phi(i+1,1)
    phi(i+1,1)=hold
-   hold=phi(i,1)
-   phi(i,1)=phi(i-1,2)
-   phi(i-1,2)=hold
+!    hold=phi(i,1)
+!    phi(i,1)=phi(i-1,2)
+!    phi(i-1,2)=hold
  enddo
 
 end subroutine LWswap
@@ -30,13 +30,14 @@ end subroutine LWswap
 ! coin operator for line quantum walker
 subroutine LWmix(phi)
  complex,dimension(:,:),intent(inout)::phi
- complex::hold
+ complex::hold,hold1
  integer:: i,n
  n=size(phi,1)
  do i=2,n-1
    hold=phi(i,1)
-   phi(i,1)=1/sqrt(2.0)*hold+1/sqrt(2.0)*phi(i,2)
-   phi(i,2)=1/sqrt(2.0)*hold-1/sqrt(2.0)*phi(i,2)
+   hold1=phi(i,2)
+   phi(i,1)=1/sqrt(2.0)*hold+1/sqrt(2.0)*hold1
+   phi(i,2)=1/sqrt(2.0)*hold-1/sqrt(2.0)*hold1
  enddo
  
 
@@ -65,7 +66,7 @@ use LineTest
 implicit none
 
 complex, dimension(:,:), allocatable:: phi,qphi
-integer::n
+integer::n,i,j
 
 n=10
 allocate(phi(n,2))
@@ -73,11 +74,24 @@ allocate(qphi(n,2))
 
 phi(:,:)=cmplx(0.0,0.0)
 qphi(:,:)=cmplx(0.0,0.0)
-phi(n/2,1)=0.5/sqrt(2.0);phi(n/2,2)=0.5/sqrt(2.0)
+phi(n/2,1)=1/sqrt(2.0);phi(n/2,2)=cmplx(0.0,1.0)/sqrt(2.0)
 
-call LWmix(phi)
-call LWswap(phi)
+OPEN(10, file='out.dat', status='REPLACE')
+do j=1,n
+    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+enddo
+write(10,*)' '
+do i=1,3
+  call LWmix(phi)
+  call LWswap(phi)
 
+
+  do j=1,n
+    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+  enddo
+  write(10,*)' '
+enddo
+close(10)
 
 end program
 
