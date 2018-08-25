@@ -9,11 +9,12 @@ module density
   
   n=size(a)
   m=size(b)
-  allocate(D(n,m))
-  
+  allocate(D(n*m))
+  k=1
   do i=1,n
     do j=1,m
-      d(i+j)=a(i)*b(j)
+      d(k)=a(i)*b(j)
+      k=k+1
     enddo
   enddo
   
