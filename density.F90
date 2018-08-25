@@ -3,8 +3,8 @@ module density
   
   
   subroutine dens_build(a,b,D)
-  complex(kdp),dimension(:,:),intent(inout)  :: D
-  complex(kdp),dimension(:),intent(in)       :: a,a
+  complex(kdp),dimension(:),intent(inout)    :: D
+  complex(kdp),dimension(:),intent(in)       :: a,b
   integer                                    :: i,j
   
   n=size(a)
@@ -13,7 +13,7 @@ module density
   
   do i=1,n
     do j=1,m
-      d(i,j)=a(i)*b(j)
+      d(i+j)=a(i)*b(j)
     enddo
   enddo
   
@@ -45,10 +45,10 @@ module density
   
  subroutine par_traceA(A,B)
   complex(kdp),dimension(:),intent(inout)  :: B
-  complex(kdp),dimension(:,:),intent(in)     :: A
+  complex(kdp),dimension(:),intent(in)     :: A
   integer                                    :: i,j,k,l,n,m
   
-  n=size(B,1)
+  n=size(B)
   m=size(A,1)
   B(:,:)=cmplx(0,0)
   
@@ -65,8 +65,8 @@ module density
   
   
  subroutine par_traceB(A,B)
-  complex(kdp),dimension(:,:),intent(inout)  :: B
-  complex(kdp),dimension(:,:),intent(in)     :: A
+  complex(kdp),dimension(:),intent(inout)  :: B
+  complex(kdp),dimension(:),intent(in)     :: A
   integer                                    :: i,j,k,l,n,m
   
   n=size(B,1)
