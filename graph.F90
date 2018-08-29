@@ -3,9 +3,18 @@ module graph
   
 contains 
 
+subroutine clear()
+
+end subroutine
 
 
+subroutine draw_line(phi)
 
+end subroutine
+
+subroutine draw_graph(phi,A)
+
+end subroutine
 
 end module
 
