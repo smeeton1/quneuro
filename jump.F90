@@ -3,8 +3,11 @@ module jump
   
 contains 
 
-subroutine jmes(Q)
-
+subroutine jmes(Q,Res)
+  complex,dimension(:),intent(in) :: Q
+  integer,intent(out)             :: Res
+ 
+  
 
 end subroutine
 
@@ -16,6 +19,9 @@ end module
 program j_test
 use jump
 implicit none
+complex,dimension(:),allocatable :: Q
+integer                          :: R
+
 
 
 
