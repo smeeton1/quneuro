@@ -2,10 +2,10 @@ module density
   implicit none
   
   
-  subroutine dens_build(a,b,D)
+ subroutine dens_build(a,b,D)
   complex(kdp),dimension(:),intent(inout)    :: D
   complex(kdp),dimension(:),intent(in)       :: a,b
-  integer                                    :: i,j
+  integer                                    :: i,j,k
   
   n=size(a)
   m=size(b)
@@ -19,7 +19,7 @@ module density
   enddo
   
   
-  end subroutine
+ end subroutine
   
   
  subroutine k_product(A,B,C)
@@ -44,50 +44,41 @@ module density
  end subroutine
   
   
- subroutine par_traceA(A,B)
-  complex(kdp),dimension(:),intent(inout)  :: B
-  complex(kdp),dimension(:),intent(in)     :: A
-  integer                                    :: i,j,k,l,n,m
+ subroutine par_traceA(A,D)!set to work for the case A and B are the same size
+  complex(kdp),dimension(:),intent(inout)  :: A
+  complex(kdp),dimension(:),intent(in)     :: D
+  integer                                  :: i,j,k,l,n,m
   
-  n=size(B)
-  m=size(A,1)
-  B(:,:)=cmplx(0,0)
+  n=size(D)
+  m=size(A)
+  l=n/m
+  A(:)=cmplx(0,0)
   
-  do i=0,n-1
-   do j=0,n-1
-    do k=1,n
-      B(i+1,j+1)=B(i+1,j+1)+A(i*n+k,j*n+k)
-    enddo
-   enddo
+  do i=1,m
+    do j=1,l
+      A(i)=A(i)+D(j+(i-1)*m)
+     enddo
   enddo
-  
- 
+
  end subroutine
   
   
- subroutine par_traceB(A,B)
+ subroutine par_traceB(B,D)!set to work for the case A and B are the same size
   complex(kdp),dimension(:),intent(inout)  :: B
-  complex(kdp),dimension(:),intent(in)     :: A
-  integer                                    :: i,j,k,l,n,m
+  complex(kdp),dimension(:),intent(in)     :: D
+  integer                                  :: i,j,k,l,n,m
   
-  n=size(B,1)
-  m=size(A,1)
-  B(:,:)=cmplx(0,0)
+  n=size(B)
+  m=size(D)
+  l=m/n
+  B(:)=cmplx(0,0)
   
-  do i=1,n
-   do j=1,n
-    do k=0,n-1
-      if(i.eq.j)then
-       B(i,j)=B(i,j)+ A(i+k*n,j+(k*n))
-      else if(i.gt.j)then
-       B(i,j)=B(i,j)+ A((i-1)*n+k*n,(j-1)*n+(k*n))
-      else
-       B(i,j)=B(i,j)+ A((i-1)*n+k*n,j*n+(k*n))
-      endif
-    enddo
-   enddo
+  do i=1,l
+    do j=1,n
+      B(j)=B(j)+D(i+(j-1)*n)
+     enddo
   enddo
- 
+  
  end subroutine
   
 end module
@@ -96,7 +87,8 @@ program K_test
 use density
 implicit none
 
-complex, dimension(:,:), allocatable:: phi,qphi,D,a
+complex, dimension(:,:), allocatable:: phi,qphi
+complex, dimension(:), allocatable:: D,a
 integer::n,i,j
 
 n=10
