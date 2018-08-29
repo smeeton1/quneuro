@@ -18,10 +18,13 @@ end module
 
 program j_test
 use jump
+!use IFCORE
 implicit none
 complex,dimension(:),allocatable :: Q
 integer                          :: R
+Logical(4)                       :: S
 
+S=PEEKCHARQQ()
 
 
 
