@@ -81,7 +81,70 @@ end subroutine
   enddo
   
  end subroutine
+ 
+ !for the qw 2d phi
+ 
+subroutine QWFphi_build(a,b,D)
+  complex,dimension(:),intent(inout)    :: D
+  complex,dimension(:,:),intent(in)     :: a
+  complex,dimension(:),intent(in)       :: b
+  integer                               :: i,j,k,n,m,l,s
   
+  n=size(a,1)
+  s=size(a,2)
+  m=size(b)
+  
+  k=1
+  do i=1,n
+    do l=1,s
+      do j=1,m
+	d(k)=a(i,l)*b(j)
+	k=k+1
+      enddo
+    enddo
+  enddo
+  
+  
+end subroutine
+ 
+  subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
+  complex,dimension(:,:),intent(inout)  :: A
+  complex,dimension(:),intent(in)     :: D
+  integer                             :: i,j,k,l,n,m
+  
+  n=size(D)
+  m=size(A)
+  l=n/m
+  A(:)=cmplx(0,0)
+  
+  do i=1,m
+    do j=1,l
+      A(i)=A(i)+D(j+(i-1)*m)
+     enddo
+  enddo
+
+ end subroutine
+  
+  
+ subroutine QWFpar_traceB(B,D)!set to work for the case A and B are the same size
+  complex,dimension(:),intent(inout)  :: B
+  complex,dimension(:),intent(in)     :: D
+  integer                             :: i,j,k,l,n,m
+  
+  n=size(B)
+  m=size(D)
+  l=m/n
+  B(:)=cmplx(0,0)
+  
+  do i=1,n
+    do j=1,l
+      B(i)=B(i)+D((j-1)*n+i)
+     enddo
+  enddo
+  
+ end subroutine
+ 
+ 
 end module
 
 program K_test
