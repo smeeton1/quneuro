@@ -119,7 +119,7 @@ end subroutine
   
   do i=1,m
     do j=1,l
-      A(i)=A(i)+D(j+(i-1)*m)
+      A(i,j)=A(i,j)+D(j+(i-1)*m)
      enddo
   enddo
 

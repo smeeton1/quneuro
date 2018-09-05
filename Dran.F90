@@ -46,6 +46,8 @@ end subroutine LWmix
 subroutine qinter(phi,qphi)
 complex,dimension(:,:),intent(inout)::phi
 complex,dimension(:,:),intent(inout)::qphi
+!interaction done qubit by qubit, q_n x phi
+!then apply interaction to the node being looked at
 
 end subroutine qinter
 
@@ -61,11 +63,15 @@ end subroutine qjump
 
 end module
 
+
+
+
 program dran
 use LineTest
 implicit none
 
 complex, dimension(:,:), allocatable:: phi,qphi
+logical,dimension(:), allocatable   :: open_node
 integer::n,i,j
 
 n=10
