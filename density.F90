@@ -103,30 +103,33 @@ subroutine QWFphi_build(a,b,D)
       enddo
     enddo
   enddo
-  
-  
 end subroutine
+  
+
  
-  subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
+subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
   complex,dimension(:,:),intent(inout)  :: A
-  complex,dimension(:),intent(in)     :: D
-  integer                             :: i,j,k,l,n,m
+  complex,dimension(:),intent(in)       :: D
+  integer                               :: i,j,k,l,n,m,s
   
   n=size(D)
-  m=size(A)
+  m=size(A,1)
+  s=size(A,2)
   l=n/m
-  A(:)=cmplx(0,0)
+  A(:,:)=cmplx(0,0)
   
   do i=1,m
-    do j=1,l
-      A(i,j)=A(i,j)+D(j+(i-1)*m)
+    do j=1,s
+      do k=1,l
+        A(i,j)=A(i,j)+D(k+(i-1)*m+(j-1)*s)
+      enddo
      enddo
   enddo
 
  end subroutine
   
   
- subroutine QWFpar_traceB(B,D)!set to work for the case A and B are the same size
+subroutine QWFpar_traceB(B,D)!set to work for the case A and B are the same size
   complex,dimension(:),intent(inout)  :: B
   complex,dimension(:),intent(in)     :: D
   integer                             :: i,j,k,l,n,m
@@ -185,8 +188,8 @@ write(10,*)' '
 
 
 write(10,*)phi(1,:),qphi(1,:)
-call dens_build(phi(1,:),qphi(1,:),D)
-call par_traceA(phi(1,:),D)
+call QWFphi_build(phi,qphi(1,:),D)
+call QWFpar_traceA(phi,D)
 call par_traceB(qphi(1,:),D)
 write(10,*)phi(1,:),qphi(1,:)
 write(10,*)D
