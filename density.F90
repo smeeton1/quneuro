@@ -169,7 +169,7 @@ do i=1,n
     phi(i,j)=j/real(10)*sqrt(2.0)
   enddo
 enddo
-allocate(D(4))
+allocate(D(4*n))
 OPEN(10, file='out.dat', status='REPLACE')
 allocate(C(n*n,n*n))
 call k_product(phi,qphi,C)
@@ -186,12 +186,25 @@ write(10,*)C(3,1),C(3,2),C(3,3),C(3,4)
 write(10,*)C(4,1),C(4,2),C(4,3),C(4,4)
 write(10,*)' '
 
+write(*,*)'k product done'
 
-write(10,*)phi(1,:),qphi(1,:)
+write(10,*)phi(1,1),phi(1,2)
+write(10,*)phi(2,1),phi(2,2)
+write(10,*)' '
+write(10,*)qphi(1,:)
+write(10,*)' '
+
 call QWFphi_build(phi,qphi(1,:),D)
+write(*,*)'D build done'
 call QWFpar_traceA(phi,D)
+write(*,*)'A trace Done'
 call par_traceB(qphi(1,:),D)
-write(10,*)phi(1,:),qphi(1,:)
+write(*,*)'B trace done'
+write(10,*)phi(1,1),phi(1,2)
+write(10,*)phi(2,1),phi(2,2)
+write(10,*)' '
+write(10,*)qphi(1,:)
+write(10,*)' '
 write(10,*)D
 write(10,*)' '
 
