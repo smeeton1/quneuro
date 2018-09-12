@@ -21,14 +21,23 @@ subroutine draw_graph(phi,A,open_node,n)
 end subroutine
 
 subroutine draw_qubit(open_node,n)
+do i =1,n
+  if(open_node(i))then
+    write(*,'(A)', ADVANCE = "NO")'[32m =   '
+  else
+    write(*,'(A)', ADVANCE = "NO")'[31m =   '
+  endif
+enddo
 
 end subroutine
 
 subroutine DrawOpenNode()
+write(*,'(A)', ADVANCE = "NO")'[97m O---'
 
 end subroutine
 
 subroutine DrawClosedNode()
+write(*,'(A)', ADVANCE = "NO")'[97m O   '
 
 end subroutine
 
