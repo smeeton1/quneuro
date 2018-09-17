@@ -99,29 +99,29 @@ end module
 
 
 
-program g_test
-use graph
-implicit none
-logical,dimension(:),allocatable  :: open_node
-integer                           :: n
-
-n=4
-
-allocate(open_node(n))
-
-open_node(:)=.TRUE.
-open_node(3)=.false.
-
-call clear()
-
-call draw_qubit(open_node,n)
-
-write(*,*)' ' 
-
-call Drawline(open_node,n)
-
-write(*,*)' '
-
-
-
-end program
+! program g_test
+! use graph
+! implicit none
+! logical,dimension(:),allocatable  :: open_node
+! integer                           :: n
+! 
+! n=4
+! 
+! allocate(open_node(n))
+! 
+! open_node(:)=.TRUE.
+! open_node(3)=.false.
+! 
+! call clear()
+! 
+! call draw_qubit(open_node,n)
+! 
+! write(*,*)' ' 
+! 
+! call Drawline(open_node,n)
+! 
+! write(*,*)' '
+! 
+! 
+! 
+! end program
