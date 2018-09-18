@@ -93,7 +93,6 @@ subroutine QWFphi_build(a,b,D)
   n=size(a,1)
   s=size(a,2)
   m=size(b)
-  
   k=1
   do i=1,n
     do l=1,s
@@ -115,13 +114,13 @@ subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
   n=size(D)
   m=size(A,1)
   s=size(A,2)
-  l=n/(m+s)
+  l=n/(m*s)
   A(:,:)=cmplx(0,0)
-  
+  !write(*,*)n,m,s,l,m*s
   do i=1,m
     do j=1,s
       do k=1,l
-        A(i,j)=A(i,j)+D(k+(i-1)*m*s+(j-1)*s)
+        A(i,j)=A(i,j)+D(k+(i-1)*s*l+(j-1)*s)
       enddo
      enddo
   enddo
@@ -158,36 +157,40 @@ end module
 ! complex, dimension(:), allocatable:: D,a
 ! integer::n,i,j
 ! 
-! n=2
+! n=7
 ! allocate(phi(n,2))
 ! allocate(qphi(n,2))
 ! phi(:,:)=cmplx(0.0,0.0)
 ! qphi(:,:)=cmplx(0.0,0.0)
 ! do i=1,n
-!   qphi(i,1)=cmplx(1.0,0.0)
-!   phi(i,1)=1/sqrt(2.0)
+!   qphi(i,1)=cmplx(0.5,0.0)
+!   qphi(i,2)=cmplx(0.5,0.0)
+!   
+! 
 ! enddo
+! phi(int(n/2),1)=cmplx(1/sqrt(2.0),-1/sqrt(2.0))
+! 
 ! allocate(D(4*n))
 ! OPEN(10, file='out.dat', status='REPLACE')
 ! allocate(C(n*n,n*n))
 ! call k_product(phi,qphi,C)
 ! 
-! write(10,*)phi(1,1),phi(1,2)
-! write(10,*)phi(2,1),phi(2,2)
-! write(10,*)' '
-! write(10,*)qphi(1,1),qphi(1,2)
-! write(10,*)qphi(2,1),qphi(2,2)
-! write(10,*)' '
-! write(10,*)C(1,1),C(1,2),C(1,3),C(1,4)
-! write(10,*)C(2,1),C(2,2),C(2,3),C(2,4)
-! write(10,*)C(3,1),C(3,2),C(3,3),C(3,4)
-! write(10,*)C(4,1),C(4,2),C(4,3),C(4,4)
-! write(10,*)' '
+! ! write(10,*)phi(1,1),phi(1,2)
+! ! write(10,*)phi(2,1),phi(2,2)
+! ! write(10,*)' '
+! ! write(10,*)qphi(1,1),qphi(1,2)
+! ! write(10,*)qphi(2,1),qphi(2,2)
+! ! write(10,*)' '
+! ! write(10,*)C(1,1),C(1,2),C(1,3),C(1,4)
+! ! write(10,*)C(2,1),C(2,2),C(2,3),C(2,4)
+! ! write(10,*)C(3,1),C(3,2),C(3,3),C(3,4)
+! ! write(10,*)C(4,1),C(4,2),C(4,3),C(4,4)
+! ! write(10,*)' '
 ! 
 ! write(*,*)'k product done'
-! 
-! write(10,*)phi(1,1),phi(1,2)
-! write(10,*)phi(2,1),phi(2,2)
+! do i=1,n
+! write(10,*)phi(i,1),phi(i,2)
+! enddo
 ! write(10,*)' '
 ! write(10,*)qphi(1,:)
 ! write(10,*)' '
@@ -198,8 +201,9 @@ end module
 ! write(*,*)'A trace Done'
 ! call par_traceB(qphi(1,:),D)
 ! write(*,*)'B trace done'
-! write(10,*)phi(1,1),phi(1,2)
-! write(10,*)phi(2,1),phi(2,2)
+! do i=1,n
+! write(10,*)phi(i,1),phi(i,2)
+! enddo
 ! write(10,*)' '
 ! write(10,*)qphi(1,:)
 ! write(10,*)' '
