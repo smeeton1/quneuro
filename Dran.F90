@@ -42,11 +42,11 @@ do i=1,3
   enddo
   write(10,*)' '
   call qinter(phi,qphi)
-!   write(10,*)'pre measure'
-!   do j=1,n
-!     write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
-!   enddo
-!   write(10,*)' '
+  write(10,*)'pre measure'
+  do j=1,n
+    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+  enddo
+  write(10,*)' '
   do j=1,n
     call jmes(qphi(i,:),open_node(j))
   enddo

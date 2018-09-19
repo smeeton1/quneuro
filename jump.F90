@@ -14,9 +14,7 @@ subroutine jmes(Q,Res)
   tsum=real(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))*0.3
   call random_seed(PUT=t)
   call random_number(ran)! = RAND(t)
-  
-  write(*,*)tsum
-  write(*,*)ran
+
   
   if(ran.lt.tsum)then
     call random_number(ran1)! = RAND(t(1))
