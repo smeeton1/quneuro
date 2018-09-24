@@ -54,6 +54,7 @@ subroutine qinter(phi,qphi)
 complex,dimension(:,:),intent(inout)::phi
 complex,dimension(:,:),intent(inout)::qphi
 complex,dimension(:),allocatable    ::D
+complex                             ::h1,h2,h3,h4
 integer                             ::n,m,i
 real                                ::gamma
 !interaction done qubit by qubit, q_n x phi
@@ -74,10 +75,11 @@ do i=1,n
     write(11,*)i,(i-1)*4
     !write(11,*)D
     write(11,*)' '
-    D(1+(i-1)*4)=(1/sqrt(2.0)*D(2+(i-1)*4)+1/sqrt(2.0)*D(4+(i-1)*4))
-    D(2+(i-1)*4)=(1/sqrt(2.0)*D(1+(i-1)*4)+1/sqrt(2.0)*D(3+(i-1)*4))
-    D(3+(i-1)*4)=(1/sqrt(2.0)*D(2+(i-1)*4)-1/sqrt(2.0)*D(4+(i-1)*4))
-    D(4+(i-1)*4)=(1/sqrt(2.0)*D(1+(i-1)*4)-1/sqrt(2.0)*D(3+(i-1)*4))
+    h1=D(1+(i-1)*4);h2=D(2+(i-1)*4);h3=D(3+(i-1)*4);h4=D(4+(i-1)*4);
+    D(1+(i-1)*4)=((1/sqrt(2.0))*h2+(1/sqrt(2.0))*h4)
+    D(2+(i-1)*4)=((1/sqrt(2.0))*h1+(1/sqrt(2.0))*h3)
+    D(3+(i-1)*4)=((1/sqrt(2.0))*h2-(1/sqrt(2.0))*h4)
+    D(4+(i-1)*4)=((1/sqrt(2.0))*h1-(1/sqrt(2.0))*h3)
     write(11,*)D(1+(i-1)*4),D(2+(i-1)*4),D(3+(i-1)*4),D(4+(i-1)*4)
   
     call QWFpar_traceA(phi,D)
