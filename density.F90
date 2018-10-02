@@ -4,9 +4,9 @@ module density
 contains 
  
 subroutine dens_build(a,b,D)
-  complex,dimension(:),intent(inout)    :: D
-  complex,dimension(:),intent(in)       :: a,b
-  integer                               :: i,j,k,n,m
+  complex*16,dimension(:),intent(inout)    :: D
+  complex*16,dimension(:),intent(in)       :: a,b
+  integer                                  :: i,j,k,n,m
   
   n=size(a)
   m=size(b)
@@ -24,9 +24,9 @@ end subroutine
   
   
  subroutine k_product(A,B,C)
-  complex,dimension(:,:),intent(inout)  :: C
-  complex,dimension(:,:),intent(in)     :: A,B
-  integer                               :: i,j,k,l,n,m
+  complex*16,dimension(:,:),intent(inout)  :: C
+  complex*16,dimension(:,:),intent(in)     :: A,B
+  integer                                  :: i,j,k,l,n,m
   
   n=size(A,1)
   m=size(C,1)
@@ -46,9 +46,9 @@ end subroutine
   
   
  subroutine par_traceA(A,D)!set to work for the case A and B are the same size
-  complex,dimension(:),intent(inout)  :: A
-  complex,dimension(:),intent(in)     :: D
-  integer                             :: i,j,k,l,n,m
+  complex*16,dimension(:),intent(inout)  :: A
+  complex*16,dimension(:),intent(in)     :: D
+  integer                                :: i,j,k,l,n,m
   
   n=size(D)
   m=size(A)
@@ -65,9 +65,9 @@ end subroutine
   
   
  subroutine par_traceB(B,D)!set to work for the case A and B are the same size
-  complex,dimension(:),intent(inout)  :: B
-  complex,dimension(:),intent(in)     :: D
-  integer                             :: i,j,k,l,n,m
+  complex*16,dimension(:),intent(inout)  :: B
+  complex*16,dimension(:),intent(in)     :: D
+  integer                                :: i,j,k,l,n,m
   
   n=size(B)
   m=size(D)
@@ -85,10 +85,10 @@ end subroutine
  !for the qw 2d phi
  
 subroutine QWFphi_build(a,b,D)
-  complex,dimension(:),intent(inout)    :: D
-  complex,dimension(:,:),intent(in)     :: a
-  complex,dimension(:),intent(in)       :: b
-  integer                               :: i,j,k,n,m,l,s
+  complex*16,dimension(:),intent(inout)    :: D
+  complex*16,dimension(:,:),intent(in)     :: a
+  complex*16,dimension(:),intent(in)       :: b
+  integer                                  :: i,j,k,n,m,l,s
   
   n=size(a,1)
   s=size(a,2)
@@ -107,9 +107,9 @@ end subroutine
 
  
 subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
-  complex,dimension(:,:),intent(inout)  :: A
-  complex,dimension(:),intent(in)       :: D
-  integer                               :: i,j,k,l,n,m,s
+  complex*16,dimension(:,:),intent(inout)  :: A
+  complex*16,dimension(:),intent(in)       :: D
+  integer                                  :: i,j,k,l,n,m,s
   
   n=size(D)
   m=size(A,1)
@@ -129,9 +129,9 @@ subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
   
   
 subroutine QWFpar_traceB(B,D)!set to work for the case A and B are the same size
-  complex,dimension(:),intent(inout)  :: B
-  complex,dimension(:),intent(in)     :: D
-  integer                             :: i,j,k,l,n,m
+  complex*16,dimension(:),intent(inout)  :: B
+  complex*16,dimension(:),intent(in)     :: D
+  integer                                :: i,j,k,l,n,m
   
   n=size(B)
   m=size(D)

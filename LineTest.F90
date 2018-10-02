@@ -12,10 +12,10 @@ contains
 
 ! swap operator for a line quantum walker
 subroutine LWswap(phi,open_node)
- complex,dimension(:,:),intent(inout)::phi
- logical,dimension(:), intent(in)    :: open_node
- integer:: i,n
- complex:: hold
+ complex*16,dimension(:,:),intent(inout)::phi
+ logical,dimension(:), intent(in)       :: open_node
+ integer                                :: i,n
+ complex*16                             :: hold
  n=size(phi,1)
  do i=1,n-1
    if(open_node(i))then
@@ -33,37 +33,37 @@ end subroutine LWswap
 
 ! coin operator for line quantum walker
 subroutine LWmix(phi,open_node)
- complex,dimension(:,:),intent(inout):: phi
- logical,dimension(:), intent(in)    :: open_node
- complex::hold,hold1
- integer:: i,n
+ complex*16,dimension(:,:),intent(inout):: phi
+ logical,dimension(:), intent(in)       :: open_node
+ complex*16                             :: hold,hold1
+ integer                                :: i,n
  n=size(phi,1)
  do i=2,n-1
-  if(open_node(i))then
+  !if(open_node(i))then
     hold=phi(i,1)
     hold1=phi(i,2)
     phi(i,1)=1/sqrt(2.0)*hold+1/sqrt(2.0)*hold1
     phi(i,2)=1/sqrt(2.0)*hold-1/sqrt(2.0)*hold1
-  endif
+  !endif
  enddo
  
 
 end subroutine LWmix
 
 subroutine qinter(phi,qphi)
-complex,dimension(:,:),intent(inout)::phi
-complex,dimension(:,:),intent(inout)::qphi
-complex,dimension(:),allocatable    ::D
-complex                             ::h1,h2,h3,h4
-integer                             ::n,m,i
-real                                ::gamma
+complex*16,dimension(:,:),intent(inout)::phi
+complex*16,dimension(:,:),intent(inout)::qphi
+complex*16,dimension(:),allocatable    ::D
+complex                                ::h1,h2,h3,h4
+integer                                ::n,m,i
+real                                   ::gamma
 !interaction done qubit by qubit, q_n x phi
 !then apply interaction to the node being looked at
 n=size(phi,1)
 m=size(phi,2)
 gamma=0.1
 !allocate(D(n*m*2))
-OPEN(11, file='Iout.dat', ACCESS='APPEND')
+!OPEN(11, file='Iout.dat', ACCESS='APPEND')
 do i=1,n
   write(11,*)phi(i,:)
 !   write(11,*)' '
@@ -71,30 +71,30 @@ do i=1,n
   if((real(phi(i,1)).ne.0).or.(real(phi(i,2)).ne.0).or.(aimag(phi(i,1)).ne.0).or.(aimag(phi(i,2)).ne.0))then
     allocate(D(n*m*2))
     call QWFphi_build(phi,qphi(i,:),D)
-    write(11,*)' '
-    write(11,*)i,(i-1)*4
+    !write(11,*)' '
+    !write(11,*)i,(i-1)*4
     !write(11,*)D
-    write(11,*)' '
+    !write(11,*)' '
     h1=D(1+(i-1)*4);h2=D(2+(i-1)*4);h3=D(3+(i-1)*4);h4=D(4+(i-1)*4);
     D(1+(i-1)*4)=((1/sqrt(2.0))*h2+(1/sqrt(2.0))*h4)
     D(2+(i-1)*4)=((1/sqrt(2.0))*h1+(1/sqrt(2.0))*h3)
     D(3+(i-1)*4)=((1/sqrt(2.0))*h2-(1/sqrt(2.0))*h4)
     D(4+(i-1)*4)=((1/sqrt(2.0))*h1-(1/sqrt(2.0))*h3)
-    write(11,*)D(1+(i-1)*4),D(2+(i-1)*4),D(3+(i-1)*4),D(4+(i-1)*4)
+    !write(11,*)D(1+(i-1)*4),D(2+(i-1)*4),D(3+(i-1)*4),D(4+(i-1)*4)
   
     call QWFpar_traceA(phi,D)
     call par_traceB(qphi(i,:),D)
-    write(11,*)phi(i,:)
-    write(11,*)' '
-    write(11,*)qphi(i,:)
-    write(11,*)' '
+    !write(11,*)phi(i,:)
+    !write(11,*)' '
+    !write(11,*)qphi(i,:)
+    !write(11,*)' '
     deallocate(D)
   endif
 
 enddo
-write(11,*)'Done'
-write(11,*)' '
-close(11)
+!write(11,*)'Done'
+!write(11,*)' '
+!close(11)
 end subroutine qinter
 
 

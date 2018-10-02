@@ -4,10 +4,10 @@ module jump
 contains 
 
 subroutine jmes(Q,Res)
-  complex,dimension(:),intent(inout) :: Q
-  logical,intent(out)                :: Res
-  real*8                             :: tsum,ran,ran1
-  integer                            :: t(12),n
+  complex*16,dimension(:),intent(inout) :: Q
+  logical,intent(out)                   :: Res
+  real*8                                :: tsum,ran,ran1
+  integer                               :: t(12),n
   
   t(1)=TIME()
   

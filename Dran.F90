@@ -4,9 +4,10 @@ use LineTest
 use jump
 implicit none
 
-complex, dimension(:,:), allocatable:: phi,qphi
+complex*16, dimension(:,:), allocatable:: phi,qphi
 logical,dimension(:), allocatable   :: open_node
 integer::n,i,j
+real::norm
 
 n=10
 allocate(phi(n,2))
@@ -28,35 +29,46 @@ qphi(n/2,2)=0.0
 qphi(n/2-1,2)=0.0
 
 OPEN(10, file='out.dat', status='REPLACE')
+norm=0
 do j=1,n
-    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+    write(10,'(A,2F8.4,A,2F8.4,A,2F8.4,A)')'(',phi(j,1),') (',phi(j,2),') (',(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2))),')'
+    norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
 enddo
+write(10,*)norm
 write(10,*)' '
-do i=1,3
-  call LWmix(phi,open_node)
+write(10,*)open_node
+write(10,*)' '
+do i=1,6
+  call qinter(phi,qphi)
+!  call LWmix(phi,open_node)
   call LWswap(phi,open_node)
   write(10,*)i
-  write(10,*)'pre interaction'
+  !write(10,*)'pre interaction'
+  norm=0
   do j=1,n
-    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+    write(10,'(A,2F8.4,A,2F8.4,A,2F8.4,A)')'(',phi(j,1),') (',phi(j,2),') (',(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2))),')'
+    norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
   enddo
-  write(10,*)' '
-  call qinter(phi,qphi)
-  write(10,*)'pre measure'
-  do j=1,n
-    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
-  enddo
-  write(10,*)' '
+  write(10,*)norm
+
+!  call qinter(phi,qphi)
+!   write(10,*)'pre measure'
+!   do j=1,n
+!     write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+!   enddo
+!   write(10,*)' '
   do j=1,n
     call jmes(qphi(i,:),open_node(j))
   enddo
-
-  write(10,*)'pos interaction'
-  do j=1,n
-    write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
-  enddo
   write(10,*)' '
-enddo
+  write(10,*)open_node
+  write(10,*)' '
+!   write(10,*)'pos interaction'
+!   do j=1,n
+!     write(10,*)phi(j,1),phi(j,2),(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+!   enddo
+!   write(10,*)' '
+ enddo
 close(10)
 
 end program
