@@ -9,7 +9,7 @@ logical,dimension(:), allocatable   :: open_node
 integer::n,i,j
 real::norm
 
-n=10
+n=4
 allocate(phi(n,2))
 allocate(qphi(n,2))
 allocate(open_node(n))
@@ -40,9 +40,10 @@ write(10,*)' '
 write(10,*)open_node
 write(10,*)' '
 do i=1,10
-  call qinter2(phi,qphi)
+
   call LWmix2(phi,open_node)
   call LWswap(phi,open_node)
+
   write(10,*)i
   !write(10,*)'pre interaction'
   norm=0
@@ -52,7 +53,7 @@ do i=1,10
     norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
   enddo
   write(10,*)norm
-
+  call qinter2(phi,qphi)
 !  call qinter(phi,qphi)
   write(10,*)'qubit'
   do j=1,n
@@ -60,6 +61,12 @@ do i=1,10
                   real(qphi(j,1)*conjg(qphi(j,1))+qphi(j,2)*conjg(qphi(j,2)))
   enddo
   write(10,*)' '
+  do j=1,n
+    write(10,'(I2,A,2F8.4,A,2F8.4,A,2F8.4,A)')j,' (',phi(j,1),') (',phi(j,2),') (', &
+                   (phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2))),')'
+    norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
+  enddo
+  write(10,*)norm
 !   do j=1,n
 !     call jmes(qphi(i,:),open_node(j))
 !   enddo

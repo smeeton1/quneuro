@@ -76,7 +76,7 @@ end subroutine
   
   do i=1,n
     do j=1,l
-      B(i)=B(i)+D((j-1)*n+i)
+      B(i)=B(i)+D((j-1)*l+i)
      enddo
   enddo
   
@@ -128,9 +128,10 @@ subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
  end subroutine
   
   
-subroutine QWFpar_traceB(B,D)!set to work for the case A and B are the same size
+subroutine QWFpar_traceB(B,D,s)!set to work for the case A and B are the same size
   complex*16,dimension(:),intent(inout)  :: B
   complex*16,dimension(:),intent(in)     :: D
+  integer                                :: s
   integer                                :: i,j,k,l,n,m
   
   n=size(B)
@@ -139,8 +140,8 @@ subroutine QWFpar_traceB(B,D)!set to work for the case A and B are the same size
   B(:)=cmplx(0,0)
   
   do i=1,n
-    do j=1,l
-      B(i)=B(i)+D((j-1)*n+i)
+    do j=1,l/s
+      B(i)=B(i)+D((j-1)*s+i)
      enddo
   enddo
   
