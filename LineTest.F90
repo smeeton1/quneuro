@@ -27,7 +27,9 @@ subroutine LWswap(phi,open_node)
 !    phi(i-1,2)=hold
    endif
  enddo
-
+!  hold=phi(n,2)
+!  phi(n,2)=phi(1,1)
+!  phi(1,1)=hold
 end subroutine LWswap
 
 
@@ -46,9 +48,29 @@ subroutine LWmix(phi,open_node)
     phi(i,2)=1/sqrt(2.0)*hold-1/sqrt(2.0)*hold1
   !endif
  enddo
+ !phi(n,:)=1/sqrt(2.0)*phi(n,:)
  
 
 end subroutine LWmix
+
+subroutine LWmix2(phi,open_node)
+ complex*16,dimension(:,:),intent(inout):: phi
+ logical,dimension(:), intent(in)       :: open_node
+ complex*16                             :: hold,hold1
+ integer                                :: i,n
+ n=size(phi,1)
+ do i=2,n-1
+  !if(open_node(i))then
+    hold=phi(i,1)
+    hold1=phi(i,2)
+    phi(i,1)=1/sqrt(2.0)*hold-cmplx(0,1/sqrt(2.0))*hold1
+    phi(i,2)=-cmplx(0,1/sqrt(2.0))*hold+1/sqrt(2.0)*hold1
+  !endif
+ enddo
+ !phi(n,:)=1/sqrt(2.0)*phi(n,:)
+ 
+
+end subroutine LWmix2
 
 subroutine qinter(phi,qphi)
 complex*16,dimension(:,:),intent(inout)::phi
@@ -97,7 +119,52 @@ enddo
 !close(11)
 end subroutine qinter
 
+subroutine qinter2(phi,qphi)
+complex*16,dimension(:,:),intent(inout)::phi
+complex*16,dimension(:,:),intent(inout)::qphi
+complex*16,dimension(:),allocatable    ::D
+complex                                ::h1,h2,h3,h4
+integer                                ::n,m,i
+real                                   ::gamma
+!interaction done qubit by qubit, q_n x phi
+!then apply interaction to the node being looked at
+n=size(phi,1)
+m=size(phi,2)
+gamma=0.1
+!allocate(D(n*m*2))
+!OPEN(11, file='Iout.dat', ACCESS='APPEND')
+do i=2,2
+  write(11,*)phi(i,:)
+!   write(11,*)' '
+!   write(11,*)qphi(i,:)
+  if((real(phi(i,1)).ne.0).or.(real(phi(i,2)).ne.0).or.(aimag(phi(i,1)).ne.0).or.(aimag(phi(i,2)).ne.0))then
+    allocate(D(n*m*2))
+    call QWFphi_build(phi,qphi(i,:),D)
+    !write(11,*)' '
+    !write(11,*)i,(i-1)*4
+    !write(11,*)D
+    !write(11,*)' '
+    h1=D(1+(i-1)*4);h2=D(2+(i-1)*4);h3=D(3+(i-1)*4);h4=D(4+(i-1)*4);
+    D(1+(i-1)*4)=((1/sqrt(2.0))*h2-cmplx(0,(1/sqrt(2.0)))*h4)
+    D(2+(i-1)*4)=((1/sqrt(2.0))*h1-cmplx(0,(1/sqrt(2.0)))*h3)
+    D(3+(i-1)*4)=(-cmplx(0,(1/sqrt(2.0)))*h2+(1/sqrt(2.0))*h4)
+    D(4+(i-1)*4)=(-cmplx(0,(1/sqrt(2.0)))*h1+(1/sqrt(2.0))*h3)
+    !write(11,*)D(1+(i-1)*4),D(2+(i-1)*4),D(3+(i-1)*4),D(4+(i-1)*4)
+  
+    call QWFpar_traceA(phi,D)
+    call par_traceB(qphi(i,:),D)
+    !write(11,*)phi(i,:)
+    !write(11,*)' '
+    !write(11,*)qphi(i,:)
+    !write(11,*)' '
+    deallocate(D)
+  endif
 
+enddo
+!write(11,*)'Done'
+!write(11,*)' '
+!close(11)
+end subroutine qinter2
 
 
 
