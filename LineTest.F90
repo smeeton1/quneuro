@@ -123,8 +123,8 @@ subroutine qinter2(phi,qphi)
 complex*16,dimension(:,:),intent(inout)::phi
 complex*16,dimension(:,:),intent(inout)::qphi
 complex*16,dimension(:),allocatable    ::D
-complex                                ::h1,h2,h3,h4
-integer                                ::n,m,i
+complex                                ::h1,h2,h3,h4,norm
+integer                                ::n,m,i,j,k
 real                                   ::gamma
 !interaction done qubit by qubit, q_n x phi
 !then apply interaction to the node being looked at
@@ -132,18 +132,18 @@ n=size(phi,1)
 m=size(phi,2)
 gamma=0.1
 !allocate(D(n*m*2))
-OPEN(11, file='Iout.dat', ACCESS='APPEND')
+!OPEN(11, file='Iout.dat', ACCESS='APPEND')
 do i=2,2
-  write(11,*)phi(i,:)
-  write(11,*)' '
-  write(11,*)qphi(i,:)
+!   write(11,*)phi(i,:)
+!   write(11,*)' '
+!   write(11,*)qphi(i,:)
   if((real(phi(i,1)).ne.0).or.(real(phi(i,2)).ne.0).or.(aimag(phi(i,1)).ne.0).or.(aimag(phi(i,2)).ne.0))then
     allocate(D(n*m*2))
     call QWFphi_build(phi,qphi(i,:),D)
-    write(11,*)' '
-    write(11,*)i,(i-1)*4
-    write(11,*)D
-    write(11,*)' '
+!    write(11,*)' '
+!    write(11,*)i,(i-1)*4
+!    write(11,*)D
+!    write(11,*)' '
 !     h1=D(1+(i-1)*4);h2=D(2+(i-1)*4);h3=D(3+(i-1)*4);h4=D(4+(i-1)*4);
 !     D(1+(i-1)*4)=((1/sqrt(2.0))*h2-cmplx(0,(1/sqrt(2.0)))*h4)
 !     D(2+(i-1)*4)=((1/sqrt(2.0))*h1-cmplx(0,(1/sqrt(2.0)))*h3)
@@ -153,17 +153,31 @@ do i=2,2
   
     call QWFpar_traceA(phi,D)
     call QWFpar_traceB(qphi(i,:),D,size(phi,2))
-    write(11,*)phi(i,:)
-    write(11,*)' '
-    write(11,*)qphi(i,:)
-    write(11,*)' '
+    norm=cmplx(0.0,0.0)
+    do j=1,2
+     norm=norm+qphi(i,j)*conjg(qphi(i,j))
+    enddo
+    qphi(i,:)=qphi(i,:)/sqrt(norm)
+    norm=cmplx(0.0,0.0)
+    do j=1,n
+      do k=1,m
+        norm=norm+phi(j,k)*conjg(phi(j,k))
+      enddo
+    enddo
+    phi(:,:)=phi(:,:)/sqrt(norm)
+!     write(11,*)'norm=',norm
+!     write(11,*)phi(i,:)
+!     write(11,*)' '
+!     write(11,*)qphi(i,:)
+!     write(11,*)' '
     deallocate(D)
   endif
 
 enddo
-write(11,*)'Done'
-write(11,*)' '
-close(11)
+
+! write(11,*)'Done'
+! write(11,*)' '
+! close(11)
 end subroutine qinter2
 
 

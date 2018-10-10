@@ -140,7 +140,7 @@ subroutine QWFpar_traceB(B,D,s)!set to work for the case A and B are the same si
   B(:)=cmplx(0,0)
   
   do i=1,n
-    do j=1,l/s
+    do j=1,l
       B(i)=B(i)+D((j-1)*s+i)
      enddo
   enddo
