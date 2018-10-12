@@ -68,7 +68,7 @@ do i=1,10
   enddo
   write(10,*)norm
 !   do j=1,n
-!     call jmes(qphi(i,:),open_node(j))
+!     call jmes(qphi(i,:),open_node(j),0.3)
 !   enddo
   write(10,*)' '
   write(10,*)open_node

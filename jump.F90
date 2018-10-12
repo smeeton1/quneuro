@@ -3,15 +3,16 @@ module jump
   
 contains 
 
-subroutine jmes(Q,Res)
+subroutine jmes(Q,Res,dt)
   complex*16,dimension(:),intent(inout) :: Q
   logical,intent(out)                   :: Res
+  real*8,intent(out)                    :: dt
   real*8                                :: tsum,ran,ran1
   integer                               :: t(12),n
   
   t(1)=TIME()
   
-  tsum=real(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))*0.3
+  tsum=real(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))*dt
   call random_seed(PUT=t)
   call random_number(ran)! = RAND(t)
 
@@ -31,11 +32,12 @@ subroutine jmes(Q,Res)
       Res=.false.
     endif
     
-    Q(1)=Q(1)+(-0.5*Q(1)+cmplx(0.0,1.0)*Q(2))*0.3
-    Q(2)=Q(2)+(-0.5*Q(2)+cmplx(0.0,1.0)*Q(1))*0.3
-    Q(1)=Q(1)/(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
-    Q(2)=Q(2)/(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
-  
+    do i=1,10
+     Q(1)=Q(1)+(-0.5*Q(1)+cmplx(0.0,1.0)*Q(2))*dt/10
+     Q(2)=Q(2)+(-0.5*Q(2)+cmplx(0.0,1.0)*Q(1))*dt/10
+     Q(1)=Q(1)/(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
+     Q(2)=Q(2)/(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
+    enddo
   endif
   
 
