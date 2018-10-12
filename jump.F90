@@ -35,8 +35,8 @@ subroutine jmes(Q,Res,dt)
     do i=1,10
      Q(1)=Q(1)+(-0.5*Q(1)+cmplx(0.0,1.0)*Q(2))*dt/10
      Q(2)=Q(2)+(-0.5*Q(2)+cmplx(0.0,1.0)*Q(1))*dt/10
-     Q(1)=Q(1)/(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
-     Q(2)=Q(2)/(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
+     Q(1)=Q(1)/sqrt(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
+     Q(2)=Q(2)/sqrt(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
     enddo
   endif
   
