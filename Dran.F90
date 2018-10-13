@@ -6,9 +6,10 @@ implicit none
 
 complex*16, dimension(:,:), allocatable:: phi,qphi
 logical,dimension(:), allocatable   :: open_node
-integer::n,i,j
+integer::n,i,j,wend
 real::norm
 
+wend=1
 n=4
 allocate(phi(n,2))
 allocate(qphi(n,2))
@@ -39,13 +40,19 @@ write(10,*)norm
 write(10,*)' '
 write(10,*)open_node
 write(10,*)' '
-do i=1,10
+do i=1,wend
 
-  call LWmix2(phi,open_node)
-  call LWswap(phi,open_node)
+!  call LWmix2(phi,open_node)
+!  call LWswap(phi,open_node)
 
   write(10,*)i
   !write(10,*)'pre interaction'
+  write(10,*)'qubit'
+  do j=1,n
+    write(10,'(I2,A,2F8.4,A,2F8.4,A,F8.4)')j,' (',qphi(j,1),') (',qphi(j,2),')', &
+                  real(qphi(j,1)*conjg(qphi(j,1))+qphi(j,2)*conjg(qphi(j,2)))
+  enddo
+  write(10,*)' '
   norm=0
   do j=1,n
     write(10,'(I2,A,2F8.4,A,2F8.4,A,2F8.4,A)')j,' (',phi(j,1),') (',phi(j,2),') (', &

@@ -8,7 +8,7 @@ subroutine jmes(Q,Res,dt)
   logical,intent(out)                   :: Res
   real*8,intent(out)                    :: dt
   real*8                                :: tsum,ran,ran1
-  integer                               :: t(12),n
+  integer                               :: t(12),n,i
   
   t(1)=TIME()
   
