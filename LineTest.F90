@@ -152,7 +152,7 @@ do i=1,n
 !     write(11,*)D(1+(i-1)*4),D(2+(i-1)*4),D(3+(i-1)*4),D(4+(i-1)*4)
   
     call QWFpar_traceA(phi,D)
-    call QWFpar_traceB(qphi(i,:),D,size(phi,2))d
+    call QWFpar_traceB(qphi(i,:),D,size(phi,2))
     norm=cmplx(0.0,0.0)
     do j=1,2
      norm=norm+qphi(i,j)*conjg(qphi(i,j))

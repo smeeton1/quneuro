@@ -128,10 +128,10 @@ subroutine QWFpar_traceA(A,D)!set to work for the case A and B are the same size
  end subroutine
   
   
-subroutine QWFpar_traceB(B,D,s)!set to work for the case A and B are the same size
+subroutine QWFpar_traceB(B,D,e)!set to work for the case A and B are the same size
   complex*16,dimension(:),intent(inout)  :: B
   complex*16,dimension(:),intent(in)     :: D
-  integer                                :: s
+  integer                                :: e
   integer                                :: i,j,k,l,n,m
   
   n=size(B)
@@ -141,7 +141,7 @@ subroutine QWFpar_traceB(B,D,s)!set to work for the case A and B are the same si
   
   do i=1,n
     do j=1,l
-      B(i)=B(i)+D((j-1)*s+i)
+      B(i)=B(i)+D((j-1)*e+i)
      enddo
   enddo
   

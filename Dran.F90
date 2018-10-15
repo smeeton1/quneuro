@@ -9,16 +9,16 @@ logical,dimension(:), allocatable   :: open_node
 integer::n,i,j,wend
 real::norm
 
-wend=1
-n=4
+wend=10
+n=10
 allocate(phi(n,2))
 allocate(qphi(n,2))
 allocate(open_node(n))
 
-open_node(:)=.true.
+open_node(:)=.false.
 phi(:,:)=cmplx(0.0,0.0)
 qphi(:,:)=cmplx(0.0,0.0)
-phi(2,1)=1/sqrt(2.0);phi(2,2)=cmplx(0.0,1.0)/sqrt(2.0)
+phi(4,1)=1/sqrt(2.0);phi(4,2)=cmplx(0.0,1.0)/sqrt(2.0)
 open_node(n/2)=.true.
 open_node(n/2-1)=.true.
 do j=1,n
@@ -42,17 +42,18 @@ write(10,*)open_node
 write(10,*)' '
 do i=1,wend
 
+  call qinter2(phi,qphi)
 !  call LWmix2(phi,open_node)
-!  call LWswap(phi,open_node)
+  call LWswap(phi,open_node)
 
   write(10,*)i
   !write(10,*)'pre interaction'
-  write(10,*)'qubit'
-  do j=1,n
-    write(10,'(I2,A,2F8.4,A,2F8.4,A,F8.4)')j,' (',qphi(j,1),') (',qphi(j,2),')', &
-                  real(qphi(j,1)*conjg(qphi(j,1))+qphi(j,2)*conjg(qphi(j,2)))
-  enddo
-  write(10,*)' '
+!   write(10,*)'qubit'
+!   do j=1,n
+!     write(10,'(I2,A,2F8.4,A,2F8.4,A,F8.4)')j,' (',qphi(j,1),') (',qphi(j,2),')', &
+!                   real(qphi(j,1)*conjg(qphi(j,1))+qphi(j,2)*conjg(qphi(j,2)))
+!   enddo
+!   write(10,*)' '
   norm=0
   do j=1,n
     write(10,'(I2,A,2F8.4,A,2F8.4,A,2F8.4,A)')j,' (',phi(j,1),') (',phi(j,2),') (', &
@@ -60,23 +61,23 @@ do i=1,wend
     norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
   enddo
   write(10,*)norm
-  call qinter2(phi,qphi)
+
 !  call qinter(phi,qphi)
   write(10,*)'qubit'
   do j=1,n
     write(10,'(I2,A,2F8.4,A,2F8.4,A,F8.4)')j,' (',qphi(j,1),') (',qphi(j,2),')', &
                   real(qphi(j,1)*conjg(qphi(j,1))+qphi(j,2)*conjg(qphi(j,2)))
   enddo
-  write(10,*)' '
-  do j=1,n
-    write(10,'(I2,A,2F8.4,A,2F8.4,A,2F8.4,A)')j,' (',phi(j,1),') (',phi(j,2),') (', &
-                   (phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2))),')'
-    norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
-  enddo
-  write(10,*)norm
+!   write(10,*)' '
 !   do j=1,n
-!     call jmes(qphi(i,:),open_node(j),0.3)
+!     write(10,'(I2,A,2F8.4,A,2F8.4,A,2F8.4,A)')j,' (',phi(j,1),') (',phi(j,2),') (', &
+!                    (phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2))),')'
+!     norm=norm+(phi(j,1)+phi(j,2))*conjg((phi(j,1)+phi(j,2)))
 !   enddo
+!   write(10,*)norm
+  do j=1,n
+    call jmes(qphi(i,:),open_node(j),0.3)
+  enddo
   write(10,*)' '
   write(10,*)open_node
   write(10,*)' '

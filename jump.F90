@@ -6,7 +6,7 @@ contains
 subroutine jmes(Q,Res,dt)
   complex*16,dimension(:),intent(inout) :: Q
   logical,intent(out)                   :: Res
-  real*8,intent(out)                    :: dt
+  real,intent(in)                       :: dt
   real*8                                :: tsum,ran,ran1
   integer                               :: t(12),n,i
   
