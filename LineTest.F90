@@ -133,7 +133,7 @@ m=size(phi,2)
 gamma=0.1
 !allocate(D(n*m*2))
 !OPEN(11, file='Iout.dat', ACCESS='APPEND')
-do i=2,2
+do i=1,n
 !   write(11,*)phi(i,:)
 !   write(11,*)' '
 !   write(11,*)qphi(i,:)
@@ -152,7 +152,7 @@ do i=2,2
 !     write(11,*)D(1+(i-1)*4),D(2+(i-1)*4),D(3+(i-1)*4),D(4+(i-1)*4)
   
     call QWFpar_traceA(phi,D)
-    call QWFpar_traceB(qphi(i,:),D,size(phi,2))
+    call QWFpar_traceB(qphi(i,:),D,size(phi,2))d
     norm=cmplx(0.0,0.0)
     do j=1,2
      norm=norm+qphi(i,j)*conjg(qphi(i,j))
