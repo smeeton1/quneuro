@@ -27,9 +27,11 @@ subroutine LWswap(phi,open_node)
 !    phi(i-1,2)=hold
    endif
  enddo
-!  hold=phi(n,2)
-!  phi(n,2)=phi(1,1)
-!  phi(1,1)=hold
+ if(open_node(n))then
+  hold=phi(n,2)
+  phi(n,2)=phi(1,1)
+  phi(1,1)=hold
+ endif
 end subroutine LWswap
 
 
