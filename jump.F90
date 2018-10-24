@@ -11,18 +11,22 @@ subroutine jmes(Q,Res,dt)
   integer                               :: t(12),n,i
   
   t(1)=TIME()
-  
-  tsum=real(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))*dt
-  call random_seed(PUT=t)
-  call random_number(ran)! = RAND(t)
+  ran=-1.0
+  do while(ran.lt.0.000001)
+   tsum=real(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))*dt
+   call random_seed(PUT=t)
+   call random_number(ran)! = RAND(t)
+  end do
 
   
   if(ran.lt.tsum)then
     call random_number(ran1)! = RAND(t(1))
     do while((ran.gt.real(CONJG(Q(1))*Q(1)).and.ran1.gt.real(CONJG(Q(2))*Q(2))))
       do while((ran.lt.real(CONJG(Q(1))*Q(1)).and.ran1.lt.real(CONJG(Q(2))*Q(2))))
+       do while(ran.lt.0.000001.and.ran1.lt.0.000001)
         call random_number(ran)!  = RAND(t(1))!
         call random_number(ran1)! = RAND(t(1))
+       end do
       end do
     enddo
     
