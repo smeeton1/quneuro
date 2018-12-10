@@ -70,20 +70,29 @@ if(abs(g).gt.0.00001)then
   hold=qbit(1)
   hold2=qbit(2)
 
-  qbit(1)=cos(s*g*dt)+hold!*hold
-  qbit(2)=(hold2/abs(hold2*hold2))*sqrt((1-(cos(s*g*dt))**2)*abs(hold*hold))
+  
+  if(hold2.ne.0.0)then
+   qbit(1)=cos(s*g*dt)+hold!*hold
+   qbit(2)=(hold2/abs(hold2*hold2))*sqrt((1-(cos(s*g*dt))**2)*abs(hold*hold))
+  endif
+    
 else
   hold=qbit(1)
   hold2=qbit(2)
-
   qbit(1)=exp(-dt)*hold
-  qbit(2)=(hold2/abs(hold2*hold2))*sqrt(1-(exp(-2.0*dt))*abs(hold*hold))
+  if(hold2.ne.0.0)then
+    qbit(2)=(hold2/abs(hold2*hold2))*sqrt(1-(exp(-2.0*dt))*abs(hold*hold))
+  else
+    qbit(2)=sqrt(1-(exp(-2.0*dt))*abs(hold*hold))
+  endif
 endif
 
-if(real(qbit(1)*conjg(qbit(1))+qbit(2)*conjg(qbit(2))).gt.1.0)then
-  qbit(1)=qbit(1)/sqrt(qbit(1)*conjg(qbit(1))+qbit(2)*conjg(qbit(2)))
-  qbit(2)=qbit(2)/sqrt(qbit(1)*conjg(qbit(1))+qbit(2)*conjg(qbit(2)))
-endif
+hold=qbit(1)
+hold2=qbit(2)
+
+qbit(1)=hold/sqrt(hold*conjg(hold)+hold2*conjg(hold2))
+qbit(2)=hold2/sqrt(hold*conjg(hold)+hold2*conjg(hold2))
+
 
 end subroutine
 
