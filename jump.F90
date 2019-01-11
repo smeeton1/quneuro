@@ -42,10 +42,9 @@ subroutine jmes(Q,Res,dt)
      hold2=Q(2)
      Q(1)=hold+(-0.5*hold+cmplx(0.0,1.0)*hold2)*dt/10
      Q(2)=hold2+(-0.5*hold2+cmplx(0.0,1.0)*hold)*dt/10
-     hold=Q(1)
-     hold2=Q(2)
-     Q(1)=hold/sqrt(CONJG(hold)*hold+CONJG(hold2)*hold2)
-     Q(2)=hold2/sqrt(CONJG(hold)*hold+CONJG(hold2)*hold2)
+     hold=sqrt(CONJG(Q(1))*Q(1)+CONJG(Q(2))*Q(2))
+     Q(1)=Q(1)/hold
+     Q(2)=Q(2)/hold
     enddo
   endif
   
@@ -87,11 +86,56 @@ else
   endif
 endif
 
-hold=qbit(1)
-hold2=qbit(2)
+hold=sqrt(qbit(1)*conjg(qbit(1))+qbit(2)*conjg(qbit(2)))
 
-qbit(1)=hold/sqrt(hold*conjg(hold)+hold2*conjg(hold2))
-qbit(2)=hold2/sqrt(hold*conjg(hold)+hold2*conjg(hold2))
+qbit(1)=qbit(1)/hold
+qbit(2)=qbit(2)/hold
+
+
+end subroutine
+
+subroutine qbit_rho_inter(qbit,phi,s,dt,g0)
+  complex*16,dimension(:),intent(inout) :: qbit,phi
+  real,intent(in)                       :: dt,s,g0
+  complex*16                            :: hold,hold2,hold3,hold4,norm
+  integer                               :: l,i
+  real*8                                :: g
+
+ l=size(phi)
+ g=0.0
+ do i=1,l
+   g=g+abs(real(phi(i)*conjg(phi(i))))
+ enddo
+
+ if(abs(g).gt.0.00001)then
+ 
+ hold=qbit(1,1)+dt*s*g(2*qbit(1,1))
+ hold2=qbit(1,2)-dt*s*g(qbit(1,2))
+ hold3=qbit(2,1)-dt*s*g(qbit(2,1))
+ hold4=qbit(2,2)-dt*s*g(2*qbit(1,1))
+ 
+ norm=hold+hold4
+ 
+ qbit(1,1)=hold/norm
+ qbit(1,2)=hold2/norm
+ qbit(2,1)=hold3/norm
+ qbit(2,2)=hold4/norm
+ 
+ else
+ 
+ hold=qbit(1,1)-dt*s*g0(2*qbit(1,1))
+ hold2=qbit(1,2)-dt*s*g0(qbit(1,2))
+ hold3=qbit(2,1)-dt*s*g0(qbit(2,1))
+ hold4=qbit(2,2)+dt*s*g0(2*qbit(1,1))
+ 
+ norm=hold+hold4
+ 
+ qbit(1,1)=hold/norm
+ qbit(1,2)=hold2/norm
+ qbit(2,1)=hold3/norm
+ qbit(2,2)=hold4/norm
+ 
+ endif
 
 
 end subroutine
